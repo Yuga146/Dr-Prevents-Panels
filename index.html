@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
@@ -103,7 +102,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400">Total Panels</p>
-                        <h3 id="statTotal" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">52</h3>
+                        <h3 id="statTotal" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">57</h3>
                     </div>
                     <div class="w-12 h-12 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center text-xl">
                         <i class="fa-solid fa-building-user"></i>
@@ -131,7 +130,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400">Corporate Direct</p>
-                        <h3 id="statCorporate" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">28</h3>
+                        <h3 id="statCorporate" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">33</h3>
                     </div>
                     <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl">
                         <i class="fa-solid fa-briefcase"></i>
@@ -176,12 +175,12 @@
                             <option value="ALL">All Branches (10)</option>
                             <option value="KP">KP - Kepong</option>
                             <option value="SD">SD - Bandar Sri Damansara</option>
-                            <option value="ST">ST - Seri Tenteram</option>
-                            <option value="JI">JI - Jalil Link</option>
+                            <option value="ST">ST - Segambut</option>
+                            <option value="JI">JI - Jalan Ipoh</option>
                             <option value="DJ">DJ - Damansara Jaya</option>
                             <option value="SS15">SS15 - Subang Jaya</option>
-                            <option value="PJOT">PJOT - Old Town PJ</option>
-                            <option value="BPP">BPP - Bandar Putra Permai</option>
+                            <option value="PJOT">PJOT - PJ Old Town</option>
+                            <option value="BPP">BPP - Bandar Puteri Puchong</option>
                             <option value="KK">KK - Kota Kemuning</option>
                             <option value="TAIPAN">TAIPAN - USJ Taipan</option>
                         </select>
@@ -392,65 +391,70 @@
     </div>
 
     <script>
-        // Full 52 Panels Dataset
+        // Full 57 Panels Dataset
         const ALL_BRANCHES = ['KP', 'SD', 'ST', 'JI', 'DJ', 'SS15', 'PJOT', 'BPP', 'KK', 'TAIPAN'];
 
         const DEFAULT_PANELS = [
             // --- TPA / INSURANCE / SCHEMES (20 entries) ---
-            { id: '1', name: 'AIA', category: 'TPA', status: 'Active', pic: 'AIA Panel Desk', phone: '1300-88-1899', branches: [...ALL_BRANCHES], notes: 'Direct Cashless Swipe via AIA Portal.' },
-            { id: '2', name: 'MICARE', category: 'TPA', status: 'Active', pic: 'MiCare Support', phone: '1-800-88-7940', branches: [...ALL_BRANCHES], notes: 'Requires active MiCare MyMed app authorization.' },
-            { id: '3', name: 'MediExpress | Health Connect', category: 'TPA', status: 'Active', pic: 'MediExpress Hotline', phone: '03-7841 3888', branches: [...ALL_BRANCHES], notes: 'Integrated HealthConnect portal verification.' },
-            { id: '4', name: 'PM Care', category: 'TPA', status: 'Active', pic: 'PMCare Helpdesk', phone: '03-8026 7799', branches: [...ALL_BRANCHES], notes: 'PMCare E-card verified on duty.' },
-            { id: '5', name: 'Red Alert', category: 'TPA', status: 'Active', pic: 'Red Alert Operations', phone: '03-7628 2800', branches: [...ALL_BRANCHES], notes: '24/7 RedAlert coverage across all branches.' },
-            { id: '6', name: 'Health Metrics', category: 'TPA', status: 'Active', pic: 'HealthMetrics Admin', phone: '03-7661 6228', branches: [...ALL_BRANCHES], notes: 'Scan QR code on HealthMetrics Portal.' },
-            { id: '7', name: 'International Medicare', category: 'TPA', status: 'Active', pic: 'Intl Medicare Ops', phone: '03-2161 0000', branches: [...ALL_BRANCHES], notes: 'Payment: International Medicare Direct Billing.' },
-            { id: '8', name: 'Mednefits', category: 'TPA', status: 'Active', pic: 'Mednefits Support', phone: '03-2726 2808', branches: [...ALL_BRANCHES], notes: 'App e-voucher scanning required.' },
-            { id: '9', name: 'MEDILINK', category: 'TPA', status: 'Active', pic: 'Medilink Global', phone: '03-2296 3188', branches: [...ALL_BRANCHES], notes: 'Medilink Global Express Card accepted.' },
-            { id: '10', name: 'MEDKAD', category: 'TPA', status: 'Active', pic: 'Medkad Support', phone: '03-8687 4748', branches: [...ALL_BRANCHES], notes: 'Real-time claims tracking via Medkad panel app.' },
-            { id: '11', name: 'MADANI (PROTECT HEALTH)', category: 'GOVERNMENT', status: 'Active', pic: 'ProtectHealth Admin', phone: '03-8687 2525', branches: [...ALL_BRANCHES], notes: 'Skim Perubatan MADANI - MyKad verification required.' },
-            { id: '12', name: 'SEHATI', category: 'GOVERNMENT', status: 'Active', pic: 'Sehati Careline', phone: '1-800-88-7342', branches: [...ALL_BRANCHES], notes: 'State Sehati health subsidy scheme.' },
-            { id: '13', name: 'CompuMed', category: 'TPA', status: 'Active', pic: 'CompuMed Helpdesk', phone: '03-7984 3888', branches: [...ALL_BRANCHES], notes: 'Direct panel connection via CompuMed Portal.' },
-            { id: '14', name: 'E-MAS', category: 'TPA', status: 'Active', pic: 'e-MAS Operations', phone: '03-2117 1188', branches: [...ALL_BRANCHES], notes: 'Executive Medical Assistance Scheme.' },
-            { id: '15', name: 'FOMEMA', category: 'GOVERNMENT', status: 'Active', pic: 'FOMEMA CS', phone: '03-2782 8777', branches: [...ALL_BRANCHES], notes: 'Foreign Worker Health Screening Panel.' },
-            { id: '16', name: 'MIYACARE', category: 'TPA', status: 'Active', pic: 'MiyaCare Line', phone: '03-7966 3888', branches: [...ALL_BRANCHES], notes: 'MiyaCare Digital Card System.' },
-            { id: '17', name: 'WECARE', category: 'TPA', status: 'Active', pic: 'WeCare Support', phone: '03-7980 1122', branches: [...ALL_BRANCHES], notes: 'WeCare Direct Benefits System.' },
-            { id: '18', name: 'SELCARE MANAGEMENT (PEDULI SIHAT)', category: 'GOVERNMENT', status: 'Active', pic: 'Selcare Careline', phone: '1-800-22-6600', branches: [...ALL_BRANCHES], notes: 'Peduli Sihat Selangor scheme.' },
-            { id: '19', name: 'ILTIZAM SELANGOR SIHAT', category: 'GOVERNMENT', status: 'Active', pic: 'ISS Hotline', phone: '1-800-22-6600', branches: [...ALL_BRANCHES], notes: 'Iltizam Selangor Sihat subsidy claims.' },
-            { id: '20', name: 'IA INTERNATIONAL ASSISTANCE', category: 'TPA', status: 'Active', pic: 'IA Desk', phone: '03-2162 5555', branches: [...ALL_BRANCHES], notes: 'International Assistance Direct Billing.' },
-            { id: '21', name: 'HEALTH4TRAVEL', category: 'TPA', status: 'Active', pic: 'H4T Operations', phone: '03-7722 1199', branches: [...ALL_BRANCHES], notes: 'Travel Health & Screening Specialist Panel.' },
-            { id: '22', name: 'TNB (Tenaga Nasional Berhad)', category: 'CORPORATE', status: 'Active', pic: 'TNB Medical Dept', phone: '03-2296 5555', branches: [...ALL_BRANCHES], notes: 'TNB Staff & Dependent Medical Card.' },
-            { id: '23', name: 'ANGSANA HEALTH x MIYACARE', category: 'TPA', status: 'Active', pic: 'Angsana Care', phone: '03-5638 2020', branches: [...ALL_BRANCHES], notes: 'Joint Angsana Health & MiyaCare network.' },
-            { id: '24', name: 'PEKA B40', category: 'GOVERNMENT', status: 'Active', pic: 'Peka B40 Desk', phone: '03-8687 2525', branches: [...ALL_BRANCHES], notes: 'Skim Peduli Kesihatan untuk Kumpulan B40.' },
+            { id: '1', name: 'AIA', category: 'TPA', status: 'Active', pic: 'AIA Panel Desk', branches: [...ALL_BRANCHES], notes: 'Direct Cashless Swipe via AIA Portal.' },
+            { id: '2', name: 'MICARE', category: 'TPA', status: 'Active', pic: 'MiCare Support', branches: [...ALL_BRANCHES], notes: 'Requires active MiCare MyMed app authorization.' },
+            { id: '3', name: 'MediExpress | Health Connect', category: 'TPA', status: 'Active', pic: 'MediExpress Hotline', branches: [...ALL_BRANCHES], notes: 'Integrated HealthConnect portal verification.' },
+            { id: '4', name: 'PM Care', category: 'TPA', status: 'Active', pic: 'PMCare Helpdesk', branches: [...ALL_BRANCHES], notes: 'PMCare E-card verified on duty.' },
+            { id: '5', name: 'Red Alert', category: 'TPA', status: 'Active', pic: 'Red Alert Operations', branches: [...ALL_BRANCHES], notes: '24/7 RedAlert coverage across all branches.' },
+            { id: '6', name: 'Health Metrics', category: 'TPA', status: 'Active', pic: 'HealthMetrics Admin', branches: [...ALL_BRANCHES], notes: 'Scan QR code on HealthMetrics Portal.' },
+            { id: '7', name: 'International Medicare', category: 'TPA', status: 'Active', pic: 'Intl Medicare Ops', branches: [...ALL_BRANCHES], notes: 'Payment: International Medicare Direct Billing.' },
+            { id: '8', name: 'Mednefits', category: 'TPA', status: 'Active', pic: 'Mednefits Support', branches: [...ALL_BRANCHES], notes: 'App e-voucher scanning required.' },
+            { id: '9', name: 'MEDILINK', category: 'TPA', status: 'Active', pic: 'Medilink Global', branches: [...ALL_BRANCHES], notes: 'Medilink Global Express Card accepted.' },
+            { id: '10', name: 'MEDKAD', category: 'TPA', status: 'Active', pic: 'Medkad Support', branches: [...ALL_BRANCHES], notes: 'Real-time claims tracking via Medkad panel app.' },
+            { id: '11', name: 'MADANI (PROTECT HEALTH)', category: 'GOVERNMENT', status: 'Active', pic: 'ProtectHealth Admin', branches: [...ALL_BRANCHES], notes: 'Skim Perubatan MADANI - MyKad verification required.' },
+            { id: '12', name: 'SEHATI', category: 'GOVERNMENT', status: 'Active', pic: 'Sehati Careline', branches: [...ALL_BRANCHES], notes: 'State Sehati health subsidy scheme.' },
+            { id: '13', name: 'CompuMed', category: 'TPA', status: 'Active', pic: 'CompuMed Helpdesk', branches: [...ALL_BRANCHES], notes: 'Direct panel connection via CompuMed Portal.' },
+            { id: '14', name: 'E-MAS', category: 'TPA', status: 'Active', pic: 'e-MAS Operations', branches: [...ALL_BRANCHES], notes: 'Executive Medical Assistance Scheme.' },
+            { id: '15', name: 'FOMEMA', category: 'GOVERNMENT', status: 'Active', pic: 'FOMEMA CS', branches: [...ALL_BRANCHES], notes: 'Foreign Worker Health Screening Panel.' },
+            { id: '16', name: 'MIYACARE', category: 'TPA', status: 'Active', pic: 'MiyaCare Line', branches: [...ALL_BRANCHES], notes: 'MiyaCare Digital Card System.' },
+            { id: '17', name: 'WECARE', category: 'TPA', status: 'Active', pic: 'WeCare Support', branches: [...ALL_BRANCHES], notes: 'WeCare Direct Benefits System.' },
+            { id: '18', name: 'SELCARE MANAGEMENT (PEDULI SIHAT)', category: 'GOVERNMENT', status: 'Active', pic: 'Selcare Careline', branches: [...ALL_BRANCHES], notes: 'Peduli Sihat Selangor scheme.' },
+            { id: '19', name: 'ILTIZAM SELANGOR SIHAT', category: 'GOVERNMENT', status: 'Active', pic: 'ISS Hotline', branches: [...ALL_BRANCHES], notes: 'Iltizam Selangor Sihat subsidy claims.' },
+            { id: '20', name: 'IA INTERNATIONAL ASSISTANCE', category: 'TPA', status: 'Active', pic: 'IA Desk', branches: [...ALL_BRANCHES], notes: 'International Assistance Direct Billing.' },
+            { id: '21', name: 'HEALTH4TRAVEL', category: 'TPA', status: 'Active', pic: 'H4T Operations', branches: [...ALL_BRANCHES], notes: 'Travel Health & Screening Specialist Panel.' },
+            { id: '22', name: 'TNB (Tenaga Nasional Berhad)', category: 'CORPORATE', status: 'Active', pic: 'TNB Medical Dept', branches: [...ALL_BRANCHES], notes: 'TNB Staff & Dependent Medical Card.' },
+            { id: '23', name: 'ANGSANA HEALTH x MIYACARE', category: 'TPA', status: 'Active', pic: 'Angsana Care', branches: [...ALL_BRANCHES], notes: 'Joint Angsana Health & MiyaCare network.' },
+            { id: '24', name: 'PEKA B40', category: 'GOVERNMENT', status: 'Active', pic: 'Peka B40 Desk', branches: [...ALL_BRANCHES], notes: 'Skim Peduli Kesihatan untuk Kumpulan B40.' },
 
-            // --- CORPORATE DIRECT COMPANIES (28 entries) ---
-            { id: '25', name: 'NIITSU', category: 'CORPORATE', status: 'Active', pic: 'Ms. Sharon Lim', phone: '03-5569 1234', branches: [...ALL_BRANCHES], notes: 'Direct billing corporate account.' },
-            { id: '26', name: 'Amanah Ikhtiar Malaysia', category: 'CORPORATE', status: 'Active', pic: 'En. Azman', phone: '03-2612 4200', branches: [...ALL_BRANCHES], notes: 'AIM Guarantee Letter required.' },
-            { id: '27', name: 'KKAIMB', category: 'CORPORATE', status: 'Active', pic: 'KKAIMB HR', phone: '03-4042 1122', branches: [...ALL_BRANCHES], notes: 'Koperasi Kaimb Staff Panel.' },
-            { id: '28', name: 'Jari Synergy Enterprise (SHELL)', category: 'CORPORATE', status: 'Active', pic: 'Mr. Alex Tan', phone: '012-389 9100', branches: [...ALL_BRANCHES], notes: 'Shell Retail Network operator.' },
-            { id: '29', name: 'Dynamic Way Sdn Bhd', category: 'CORPORATE', status: 'Active', pic: 'Ms. Karen', phone: '03-7804 5566', branches: [...ALL_BRANCHES], notes: 'Direct GL issued by HR.' },
-            { id: '30', name: 'Idea House', category: 'CORPORATE', status: 'Active', pic: 'Admin Desk', phone: '03-6258 9988', branches: [...ALL_BRANCHES], notes: 'Staff badge presentation required.' },
-            { id: '31', name: 'UNITY SALES', category: 'CORPORATE', status: 'Active', pic: 'Mr. David Wong', phone: '03-7982 4411', branches: [...ALL_BRANCHES], notes: 'Direct corporate arrangement.' },
-            { id: '32', name: 'TGA AIRCOND', category: 'CORPORATE', status: 'Active', pic: 'HR Dept', phone: '03-6156 3322', branches: [...ALL_BRANCHES], notes: 'Staff identification required.' },
-            { id: '33', name: 'EXTRA NATURAL', category: 'CORPORATE', status: 'Active', pic: 'Ms. Chloe', phone: '03-8061 7788', branches: [...ALL_BRANCHES], notes: 'Direct Panel.' },
-            { id: '34', name: 'ROGER YUE', category: 'CORPORATE', status: 'Active', pic: 'Roger Yue Office', phone: '03-2144 1133', branches: [...ALL_BRANCHES], notes: 'Roger Yue & Co Direct Account.' },
-            { id: '35', name: 'UNIQUE SEAFOOD', category: 'CORPORATE', status: 'Active', pic: 'HR Manager', phone: '03-7955 3388', branches: [...ALL_BRANCHES], notes: 'Unique Seafood Group staff coverage.' },
-            { id: '36', name: 'PONTESA CARE', category: 'CORPORATE', status: 'Active', pic: 'Pontesa Admin', phone: '03-5191 8822', branches: [...ALL_BRANCHES], notes: 'Direct corporate panel.' },
-            { id: '37', name: 'INFOCONNECT / InfoConnect / Docuflo / BPI / Firstbase', category: 'CORPORATE', status: 'Active', pic: 'Ms. Jessica Lim', phone: '03-7880 2233', branches: [...ALL_BRANCHES], notes: 'Group umbrella account covering Infoconnect, Docuflo, BPI, & Firstbase.' },
-            { id: '38', name: 'LAKSAMANA USAHA NOODLES', category: 'CORPORATE', status: 'Active', pic: 'Mr. Lee', phone: '03-6274 5500', branches: [...ALL_BRANCHES], notes: 'Direct Factory Panel.' },
-            { id: '39', name: 'ZENITH SALES AND SERVICES SDN BHD', category: 'CORPORATE', status: 'Active', pic: 'Admin Dept', phone: '03-5631 9900', branches: [...ALL_BRANCHES], notes: 'Zenith Sales employee account.' },
-            { id: '40', name: 'NAGA DDB / Ampersand / Chariot / Cilisos / Dragonfly / Talon', category: 'CORPORATE', status: 'Active', pic: 'People Team (Naga)', phone: '03-7725 8888', branches: [...ALL_BRANCHES], notes: 'Agencies group: Naga DDB, Ampersand, Chariot, Cilisos, Dragonfly, Talon.' },
-            { id: '41', name: 'MAA ANIMAL CARE', category: 'CORPORATE', status: 'Active', pic: 'Ms. Sarah', phone: '03-4251 6677', branches: [...ALL_BRANCHES], notes: 'MAA Group Subsidiary Panel.' },
-            { id: '42', name: 'SHIN ZUSHI (KEPONG) SDN. BHD.', category: 'CORPORATE', status: 'Active', pic: 'Branch Manager', phone: '03-6243 3311', branches: [...ALL_BRANCHES], notes: 'Shin Zushi Staff Direct Panel.' },
-            { id: '43', name: 'TEMPER & SENSE SDN BHD', category: 'CORPORATE', status: 'Active', pic: 'HR Desk', phone: '03-7733 4455', branches: [...ALL_BRANCHES], notes: 'Direct corporate billing.' },
-            { id: '44', name: 'WAKOMAS CHEMICAL SDN BHD', category: 'CORPORATE', status: 'Active', pic: 'Ms. Jenny', phone: '03-3342 9911', branches: [...ALL_BRANCHES], notes: 'Wakomas Staff GL.' },
-            { id: '45', name: 'Itamac (M) Sdn. Bhd. / Shun Yi Sdn. Bhd.', category: 'CORPORATE', status: 'Active', pic: 'HR Office', phone: '03-8023 1188', branches: [...ALL_BRANCHES], notes: 'Joint corporate account for Itamac and Shun Yi.' },
-            { id: '46', name: 'Aesthetic Leader Sdn. Bhd.', category: 'CORPORATE', status: 'Active', pic: 'Ms. Nicole', phone: '03-2148 5544', branches: [...ALL_BRANCHES], notes: 'Aesthetic Leader Staff Panel.' },
-            { id: '47', name: 'Infinitium Holdings Sdn Bhd', category: 'CORPORATE', status: 'Active', pic: 'Infinitium HR', phone: '03-7650 1100', branches: [...ALL_BRANCHES], notes: 'Infinitium Group employee benefits.' },
-            { id: '48', name: 'Handal Indah Sdn Bhd', category: 'CORPORATE', status: 'Active', pic: 'En. Rashid', phone: '07-3833 8222', branches: [...ALL_BRANCHES], notes: 'Causeway Link / Handal Indah transport team panel.' },
-            { id: '49', name: 'D.F. PRINTER & SUPPLIES SDN. BHD.', category: 'CORPORATE', status: 'Active', pic: 'Mr. Tan', phone: '03-6250 8899', branches: [...ALL_BRANCHES], notes: 'DF Printer staff medical account.' },
-            { id: '50', name: 'Wawasan Bintang Sdn. Bhd.', category: 'CORPORATE', status: 'Active', pic: 'Admin Manager', phone: '03-5121 7766', branches: [...ALL_BRANCHES], notes: 'Wawasan Bintang Direct Account.' },
-            { id: '51', name: 'Jaz & Ro Music Malaysia Sdn. Bhd.', category: 'CORPORATE', status: 'Active', pic: 'Mr. Jaz', phone: '03-7728 0011', branches: [...ALL_BRANCHES], notes: 'Jaz & Ro Music employee panel.' },
-            { id: '52', name: 'Narashi Services Sdn. Bhd.', category: 'CORPORATE', status: 'Active', pic: 'Mr. Siva', phone: '03-3324 6655', branches: [...ALL_BRANCHES], notes: 'Narashi Services Direct Account.' }
+            // --- CORPORATE DIRECT COMPANIES (33 entries) ---
+            { id: '25', name: 'NIITSU', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Direct billing corporate account.' },
+            { id: '26', name: 'Amanah Ikhtiar Malaysia', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'AIM Guarantee Letter required.' },
+            { id: '27', name: 'KKAIMB', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Koperasi Kaimb Staff Panel.' },
+            { id: '28', name: 'Jari Synergy Enterprise (SHELL)', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Shell Retail Network operator.' },
+            { id: '29', name: 'Dynamic Way Sdn Bhd', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Direct GL issued by HR.' },
+            { id: '30', name: 'Idea House', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Staff badge presentation required.' },
+            { id: '31', name: 'UNITY SALES', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Direct corporate arrangement.' },
+            { id: '32', name: 'TGA AIRCOND', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Staff identification required.' },
+            { id: '33', name: 'EXTRA NATURAL', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Direct Panel.' },
+            { id: '34', name: 'ROGER YUE', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Roger Yue & Co Direct Account.' },
+            { id: '35', name: 'UNIQUE SEAFOOD', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Unique Seafood Group staff coverage.' },
+            { id: '36', name: 'PONTESA CARE', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Direct corporate panel.' },
+            { id: '37', name: 'INFOCONNECT / InfoConnect / Docuflo / BPI / Firstbase', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Group umbrella account covering Infoconnect, Docuflo, BPI, & Firstbase.' },
+            { id: '38', name: 'LAKSAMANA USAHA NOODLES', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Direct Factory Panel.' },
+            { id: '39', name: 'ZENITH SALES AND SERVICES SDN BHD', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Zenith Sales employee account.' },
+            { id: '40', name: 'NAGA DDB SDN BHD', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Agencies group: Naga DDB.' },
+            { id: '41', name: 'Ampersand Advisory SDN BHD', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Agencies group: Ampersand.' },
+            { id: '42', name: 'Chariot Agency SDN BHD', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Agencies group: Chariot.' },
+            { id: '43', name: 'Cilisos Media SDN BHD', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Agencies group: Cilisos.' },
+            { id: '44', name: 'Dragonfly Designworks SDN BHD', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Agencies group: Dragonfly.' },
+            { id: '45', name: 'Talon Creative SDN BHD', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Agencies group: Ampersand, Chariot, Cilisos, Dragonfly, Talon.' },            
+            { id: '46', name: 'MAA ANIMAL CARE', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'MAA Group Subsidiary Panel.' },
+            { id: '47', name: 'SHIN ZUSHI (KEPONG) SDN. BHD.', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Shin Zushi Staff Direct Panel.' },
+            { id: '48', name: 'TEMPER & SENSE SDN BHD', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Direct corporate billing.' },
+            { id: '49', name: 'WAKOMAS CHEMICAL SDN BHD', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Wakomas Staff GL.' },
+            { id: '50', name: 'Itamac (M) Sdn. Bhd. / Shun Yi Sdn. Bhd.', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Joint corporate account for Itamac and Shun Yi.' },
+            { id: '51', name: 'Aesthetic Leader Sdn. Bhd.', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Aesthetic Leader Staff Panel.' },
+            { id: '52', name: 'Infinitium Holdings Sdn Bhd', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Infinitium Group employee benefits.' },
+            { id: '53', name: 'Handal Indah Sdn Bhd', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Causeway Link / Handal Indah transport team panel.' },
+            { id: '54', name: 'D.F. PRINTER & SUPPLIES SDN. BHD.', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'DF Printer staff medical account.' },
+            { id: '55', name: 'Wawasan Bintang Sdn. Bhd.', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Wawasan Bintang Direct Account.' },
+            { id: '56', name: 'Jaz & Ro Music Malaysia Sdn. Bhd.', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Jaz & Ro Music employee panel.' },
+            { id: '57', name: 'Narashi Services Sdn. Bhd.', category: 'CORPORATE', status: 'Active', branches: [...ALL_BRANCHES], notes: 'Narashi Services Direct Account.' }
         ];
 
         // App State
