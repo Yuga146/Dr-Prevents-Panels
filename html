@@ -1,0 +1,883 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrPrevents - Clinic Panel & Branch Directory</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        cyanBrand: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                        },
+                        darkBg: '#0f172a',
+                        darkCard: '#1e293b',
+                        darkBorder: '#334155'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-darkBg dark:text-slate-100 min-h-full flex flex-col transition-colors duration-200">
+
+    <!-- Top Header Navigation -->
+    <header class="sticky top-0 z-30 bg-white/90 dark:bg-darkCard/90 backdrop-blur-md border-b border-slate-200 dark:border-darkBorder shadow-sm transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo & Brand -->
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-700 via-brand-600 to-cyanBrand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                    <i class="fa-solid fa-stethoscope text-2xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-700 via-brand-600 to-cyanBrand-600 dark:from-blue-400 dark:to-cyanBrand-400 bg-clip-text text-transparent">DrPrevents</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full font-semibold bg-brand-100 text-brand-800 dark:bg-brand-900/60 dark:text-brand-300">CLINIC NETWORK</span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Panel Directory & Branch Management System</p>
+                </div>
+            </div>
+
+            <!-- Actions & Controls -->
+            <div class="flex items-center space-x-3">
+                <button id="addPanelBtn" class="flex items-center space-x-2 bg-gradient-to-r from-brand-600 to-cyanBrand-600 hover:from-brand-700 hover:to-cyanBrand-700 text-white font-medium text-sm px-4 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span class="hidden sm:inline">Add New Panel</span>
+                </button>
+
+                <!-- Theme Toggle Button -->
+                <button id="themeToggleBtn" aria-label="Toggle theme" class="p-2.5 rounded-xl border border-slate-200 dark:border-darkBorder bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <i class="fa-solid fa-moon text-base dark:hidden"></i>
+                    <i class="fa-solid fa-sun text-base hidden dark:block text-amber-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Top Summary Cards (No branch overlap) -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <!-- Total Panels -->
+            <div class="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm relative overflow-hidden group">
+                <div class="absolute -right-2 -bottom-2 w-20 h-20 bg-brand-500/10 dark:bg-brand-500/20 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400">Total Panels</p>
+                        <h3 id="statTotal" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">52</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-building-user"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TPAs & Insurance -->
+            <div class="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm relative overflow-hidden group">
+                <div class="absolute -right-2 -bottom-2 w-20 h-20 bg-cyanBrand-500/10 dark:bg-cyanBrand-500/20 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400">TPAs / Insurance</p>
+                        <h3 id="statTpa" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">20</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-cyan-50 dark:bg-cyan-900/40 text-cyanBrand-500 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Corporate Direct -->
+            <div class="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm relative overflow-hidden group">
+                <div class="absolute -right-2 -bottom-2 w-20 h-20 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400">Corporate Direct</p>
+                        <h3 id="statCorporate" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">28</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Government Schemes -->
+            <div class="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm relative overflow-hidden group">
+                <div class="absolute -right-2 -bottom-2 w-20 h-20 bg-sky-500/10 dark:bg-sky-500/20 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400">Govt / Schemes</p>
+                        <h3 id="statGovt" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-1">4</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-sky-50 dark:bg-sky-900/40 text-sky-600 dark:text-sky-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-landmark"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search & Dynamic Filter Controls -->
+        <section class="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm space-y-4">
+            <div class="flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center">
+                
+                <!-- Search Box -->
+                <div class="relative flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" placeholder="Search by panel name, corporate direct brand, PIC, or phone..." class="w-full pl-11 pr-10 py-3 bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                    <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Filters & Controls Container -->
+                <div class="flex flex-wrap items-center gap-3">
+                    
+                    <!-- Branch Filter Dropdown -->
+                    <div class="relative flex-1 sm:flex-none">
+                        <select id="branchSelectFilter" class="w-full sm:w-auto px-4 py-3 bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-700 dark:text-slate-200">
+                            <option value="ALL">All Branches (10)</option>
+                            <option value="KP">KP - Kepong</option>
+                            <option value="SD">SD - Bandar Sri Damansara</option>
+                            <option value="ST">ST - Seri Tenteram</option>
+                            <option value="JI">JI - Jalil Link</option>
+                            <option value="DJ">DJ - Damansara Jaya</option>
+                            <option value="SS15">SS15 - Subang Jaya</option>
+                            <option value="PJOT">PJOT - Old Town PJ</option>
+                            <option value="BPP">BPP - Bandar Putra Permai</option>
+                            <option value="KK">KK - Kota Kemuning</option>
+                            <option value="TAIPAN">TAIPAN - USJ Taipan</option>
+                        </select>
+                    </div>
+
+                    <!-- Layout View Switcher -->
+                    <div class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <button id="viewListBtn" class="px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors bg-white dark:bg-darkCard text-brand-600 dark:text-brand-400 shadow-sm">
+                            <i class="fa-solid fa-list"></i>
+                            <span>List View</span>
+                        </button>
+                        <button id="viewGridBtn" class="px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                            <i class="fa-solid fa-border-all"></i>
+                            <span>Branch Matrix</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div class="flex items-center space-x-2 border-t border-slate-100 dark:border-slate-800 pt-4 overflow-x-auto no-scrollbar">
+                <button data-category="ALL" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors bg-brand-600 text-white shadow-sm">
+                    All Categories
+                </button>
+                <button data-category="TPA" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700">
+                    TPA / Insurance
+                </button>
+                <button data-category="CORPORATE" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700">
+                    Corporate Direct
+                </button>
+                <button data-category="GOVERNMENT" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700">
+                    Government / Schemes
+                </button>
+            </div>
+        </section>
+
+        <!-- Active Search / Filter Indicator -->
+        <div id="filterStatus" class="hidden flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1">
+            <span>Showing filtered results for: <strong id="filterStatusText" class="text-brand-600 dark:text-brand-400"></strong></span>
+            <button id="resetFiltersBtn" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">Reset all filters</button>
+        </div>
+
+        <!-- ListView Container -->
+        <div id="panelListView" class="space-y-4">
+            <!-- Panels list injected here dynamically -->
+        </div>
+
+        <!-- Matrix View Container (Hidden by default) -->
+        <div id="panelMatrixView" class="hidden bg-white dark:bg-darkCard rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr class="bg-slate-100 dark:bg-slate-900/80 border-b border-slate-200 dark:border-darkBorder font-bold text-slate-700 dark:text-slate-300">
+                        <th class="p-4 sticky left-0 bg-slate-100 dark:bg-slate-900 z-10 min-w-[200px]">Panel Name</th>
+                        <th class="p-4">Type</th>
+                        <th class="p-2 text-center">KP</th>
+                        <th class="p-2 text-center">SD</th>
+                        <th class="p-2 text-center">ST</th>
+                        <th class="p-2 text-center">JI</th>
+                        <th class="p-2 text-center">DJ</th>
+                        <th class="p-2 text-center">SS15</th>
+                        <th class="p-2 text-center">PJOT</th>
+                        <th class="p-2 text-center">BPP</th>
+                        <th class="p-2 text-center">KK</th>
+                        <th class="p-2 text-center">TAIPAN</th>
+                    </tr>
+                </thead>
+                <tbody id="matrixTableBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                    <!-- Matrix rows generated dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden bg-white dark:bg-darkCard p-12 rounded-2xl border border-slate-200/80 dark:border-darkBorder text-center space-y-4">
+            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-400 text-2xl">
+                <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h4 class="text-base font-bold text-slate-800 dark:text-white">No Matching Panels Found</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">Try adjusting your search terms, changing the branch selection, or clearing selected filter tabs.</p>
+            <button onclick="resetFilters()" class="px-4 py-2 bg-brand-600 text-white text-xs font-medium rounded-xl hover:bg-brand-700 transition-colors">Clear All Filters</button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-darkBorder bg-white/50 dark:bg-darkCard/50 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400 space-y-1">
+            <p>© 2026 DrPrevents Medical Group. Clinic Panel Management Directory.</p>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500">Includes all 10 branches: KP, SD, ST, JI, DJ, SS15, PJOT, BPP, KK, TAIPAN.</p>
+        </div>
+    </footer>
+
+    <!-- ADD PANEL MODAL -->
+    <div id="addPanelModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-darkCard border border-slate-200 dark:border-darkBorder w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden transform transition-all">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-200 dark:border-darkBorder flex items-center justify-between bg-slate-50 dark:bg-slate-900/50">
+                <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-plus-circle text-brand-600 dark:text-brand-400"></i>
+                    <span>Add New Panel</span>
+                </h3>
+                <button class="modal-close text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form -->
+            <form id="addPanelForm" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Panel / Company Name *</label>
+                    <input type="text" id="panelNameInput" required placeholder="e.g. Acme Health TPA" class="w-full px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Category *</label>
+                        <select id="panelCategoryInput" required class="w-full px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+                            <option value="TPA">TPA / Insurance</option>
+                            <option value="CORPORATE">Corporate Direct</option>
+                            <option value="GOVERNMENT">Government / Scheme</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Status</label>
+                        <select id="panelStatusInput" class="w-full px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+                            <option value="Active">Active</option>
+                            <option value="Pending">Pending Setup</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Contact Person / PIC Name</label>
+                    <input type="text" id="panelPicInput" placeholder="e.g. Mr. John Doe" class="w-full px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Contact Phone Number</label>
+                    <input type="text" id="panelPhoneInput" placeholder="e.g. +6012-3456789" class="w-full px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white">
+                </div>
+
+                <!-- Branch Checkboxes -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Available Branches (Select All Applicable)</label>
+                    <div class="grid grid-cols-5 gap-2 p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <label class="flex items-center space-x-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" name="branchCheckbox" value="KP" checked class="rounded text-brand-600 focus:ring-brand-500">
+                            <span>KP</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" name="branchCheckbox" value="SD" checked class="rounded text-brand-600 focus:ring-brand-500">
+                            <span>SD</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" name="branchCheckbox" value="ST" checked class="rounded text-brand-600 focus:ring-brand-500">
+                            <span>ST</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" name="branchCheckbox" value="JI" checked class="rounded text-brand-600 focus:ring-brand-500">
+                            <span>JI</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" name="branchCheckbox" value="DJ" checked class="rounded text-brand-600 focus:ring-brand-500">
+                            <span>DJ</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" name="branchCheckbox" value="SS15" checked class="rounded text-brand-600 focus:ring-brand-500">
+                            <span>SS15</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" name="branchCheckbox" value="PJOT" checked class="rounded text-brand-600 focus:ring-brand-500">
+                            <span>PJOT</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" name="branchCheckbox" value="BPP" checked class="rounded text-brand-600 focus:ring-brand-500">
+                            <span>BPP</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" name="branchCheckbox" value="KK" checked class="rounded text-brand-600 focus:ring-brand-500">
+                            <span>KK</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" name="branchCheckbox" value="TAIPAN" checked class="rounded text-brand-600 focus:ring-brand-500">
+                            <span>TAIPAN</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Additional Remarks / Notes</label>
+                    <textarea id="panelNotesInput" rows="2" placeholder="e.g. Pre-approval required for Specialist referral" class="w-full px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white"></textarea>
+                </div>
+
+                <div class="pt-2 flex items-center justify-end space-x-3">
+                    <button type="button" class="modal-close px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Cancel</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 text-white text-xs font-semibold hover:bg-brand-700 shadow-md transition-all">Save Panel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PANEL DETAILS MODAL -->
+    <div id="detailModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-darkCard border border-slate-200 dark:border-darkBorder w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden transform transition-all">
+            <div id="detailModalContent">
+                <!-- Injected dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Full 52 Panels Dataset
+        const ALL_BRANCHES = ['KP', 'SD', 'ST', 'JI', 'DJ', 'SS15', 'PJOT', 'BPP', 'KK', 'TAIPAN'];
+
+        const DEFAULT_PANELS = [
+            // --- TPA / INSURANCE / SCHEMES (20 entries) ---
+            { id: '1', name: 'AIA', category: 'TPA', status: 'Active', pic: 'AIA Panel Desk', phone: '1300-88-1899', branches: [...ALL_BRANCHES], notes: 'Direct Cashless Swipe via AIA Portal.' },
+            { id: '2', name: 'MICARE', category: 'TPA', status: 'Active', pic: 'MiCare Support', phone: '1-800-88-7940', branches: [...ALL_BRANCHES], notes: 'Requires active MiCare MyMed app authorization.' },
+            { id: '3', name: 'MediExpress | Health Connect', category: 'TPA', status: 'Active', pic: 'MediExpress Hotline', phone: '03-7841 3888', branches: [...ALL_BRANCHES], notes: 'Integrated HealthConnect portal verification.' },
+            { id: '4', name: 'PM Care', category: 'TPA', status: 'Active', pic: 'PMCare Helpdesk', phone: '03-8026 7799', branches: [...ALL_BRANCHES], notes: 'PMCare E-card verified on duty.' },
+            { id: '5', name: 'Red Alert', category: 'TPA', status: 'Active', pic: 'Red Alert Operations', phone: '03-7628 2800', branches: [...ALL_BRANCHES], notes: '24/7 RedAlert coverage across all branches.' },
+            { id: '6', name: 'Health Metrics', category: 'TPA', status: 'Active', pic: 'HealthMetrics Admin', phone: '03-7661 6228', branches: [...ALL_BRANCHES], notes: 'Scan QR code on HealthMetrics Portal.' },
+            { id: '7', name: 'International Medicare', category: 'TPA', status: 'Active', pic: 'Intl Medicare Ops', phone: '03-2161 0000', branches: [...ALL_BRANCHES], notes: 'Payment: International Medicare Direct Billing.' },
+            { id: '8', name: 'Mednefits', category: 'TPA', status: 'Active', pic: 'Mednefits Support', phone: '03-2726 2808', branches: [...ALL_BRANCHES], notes: 'App e-voucher scanning required.' },
+            { id: '9', name: 'MEDILINK', category: 'TPA', status: 'Active', pic: 'Medilink Global', phone: '03-2296 3188', branches: [...ALL_BRANCHES], notes: 'Medilink Global Express Card accepted.' },
+            { id: '10', name: 'MEDKAD', category: 'TPA', status: 'Active', pic: 'Medkad Support', phone: '03-8687 4748', branches: [...ALL_BRANCHES], notes: 'Real-time claims tracking via Medkad panel app.' },
+            { id: '11', name: 'MADANI (PROTECT HEALTH)', category: 'GOVERNMENT', status: 'Active', pic: 'ProtectHealth Admin', phone: '03-8687 2525', branches: [...ALL_BRANCHES], notes: 'Skim Perubatan MADANI - MyKad verification required.' },
+            { id: '12', name: 'SEHATI', category: 'GOVERNMENT', status: 'Active', pic: 'Sehati Careline', phone: '1-800-88-7342', branches: [...ALL_BRANCHES], notes: 'State Sehati health subsidy scheme.' },
+            { id: '13', name: 'CompuMed', category: 'TPA', status: 'Active', pic: 'CompuMed Helpdesk', phone: '03-7984 3888', branches: [...ALL_BRANCHES], notes: 'Direct panel connection via CompuMed Portal.' },
+            { id: '14', name: 'E-MAS', category: 'TPA', status: 'Active', pic: 'e-MAS Operations', phone: '03-2117 1188', branches: [...ALL_BRANCHES], notes: 'Executive Medical Assistance Scheme.' },
+            { id: '15', name: 'FOMEMA', category: 'GOVERNMENT', status: 'Active', pic: 'FOMEMA CS', phone: '03-2782 8777', branches: [...ALL_BRANCHES], notes: 'Foreign Worker Health Screening Panel.' },
+            { id: '16', name: 'MIYACARE', category: 'TPA', status: 'Active', pic: 'MiyaCare Line', phone: '03-7966 3888', branches: [...ALL_BRANCHES], notes: 'MiyaCare Digital Card System.' },
+            { id: '17', name: 'WECARE', category: 'TPA', status: 'Active', pic: 'WeCare Support', phone: '03-7980 1122', branches: [...ALL_BRANCHES], notes: 'WeCare Direct Benefits System.' },
+            { id: '18', name: 'SELCARE MANAGEMENT (PEDULI SIHAT)', category: 'GOVERNMENT', status: 'Active', pic: 'Selcare Careline', phone: '1-800-22-6600', branches: [...ALL_BRANCHES], notes: 'Peduli Sihat Selangor scheme.' },
+            { id: '19', name: 'ILTIZAM SELANGOR SIHAT', category: 'GOVERNMENT', status: 'Active', pic: 'ISS Hotline', phone: '1-800-22-6600', branches: [...ALL_BRANCHES], notes: 'Iltizam Selangor Sihat subsidy claims.' },
+            { id: '20', name: 'IA INTERNATIONAL ASSISTANCE', category: 'TPA', status: 'Active', pic: 'IA Desk', phone: '03-2162 5555', branches: [...ALL_BRANCHES], notes: 'International Assistance Direct Billing.' },
+            { id: '21', name: 'HEALTH4TRAVEL', category: 'TPA', status: 'Active', pic: 'H4T Operations', phone: '03-7722 1199', branches: [...ALL_BRANCHES], notes: 'Travel Health & Screening Specialist Panel.' },
+            { id: '22', name: 'TNB (Tenaga Nasional Berhad)', category: 'CORPORATE', status: 'Active', pic: 'TNB Medical Dept', phone: '03-2296 5555', branches: [...ALL_BRANCHES], notes: 'TNB Staff & Dependent Medical Card.' },
+            { id: '23', name: 'ANGSANA HEALTH x MIYACARE', category: 'TPA', status: 'Active', pic: 'Angsana Care', phone: '03-5638 2020', branches: [...ALL_BRANCHES], notes: 'Joint Angsana Health & MiyaCare network.' },
+            { id: '24', name: 'PEKA B40', category: 'GOVERNMENT', status: 'Active', pic: 'Peka B40 Desk', phone: '03-8687 2525', branches: [...ALL_BRANCHES], notes: 'Skim Peduli Kesihatan untuk Kumpulan B40.' },
+
+            // --- CORPORATE DIRECT COMPANIES (28 entries) ---
+            { id: '25', name: 'NIITSU', category: 'CORPORATE', status: 'Active', pic: 'Ms. Sharon Lim', phone: '03-5569 1234', branches: [...ALL_BRANCHES], notes: 'Direct billing corporate account.' },
+            { id: '26', name: 'Amanah Ikhtiar Malaysia', category: 'CORPORATE', status: 'Active', pic: 'En. Azman', phone: '03-2612 4200', branches: [...ALL_BRANCHES], notes: 'AIM Guarantee Letter required.' },
+            { id: '27', name: 'KKAIMB', category: 'CORPORATE', status: 'Active', pic: 'KKAIMB HR', phone: '03-4042 1122', branches: [...ALL_BRANCHES], notes: 'Koperasi Kaimb Staff Panel.' },
+            { id: '28', name: 'Jari Synergy Enterprise (SHELL)', category: 'CORPORATE', status: 'Active', pic: 'Mr. Alex Tan', phone: '012-389 9100', branches: [...ALL_BRANCHES], notes: 'Shell Retail Network operator.' },
+            { id: '29', name: 'Dynamic Way Sdn Bhd', category: 'CORPORATE', status: 'Active', pic: 'Ms. Karen', phone: '03-7804 5566', branches: [...ALL_BRANCHES], notes: 'Direct GL issued by HR.' },
+            { id: '30', name: 'Idea House', category: 'CORPORATE', status: 'Active', pic: 'Admin Desk', phone: '03-6258 9988', branches: [...ALL_BRANCHES], notes: 'Staff badge presentation required.' },
+            { id: '31', name: 'UNITY SALES', category: 'CORPORATE', status: 'Active', pic: 'Mr. David Wong', phone: '03-7982 4411', branches: [...ALL_BRANCHES], notes: 'Direct corporate arrangement.' },
+            { id: '32', name: 'TGA AIRCOND', category: 'CORPORATE', status: 'Active', pic: 'HR Dept', phone: '03-6156 3322', branches: [...ALL_BRANCHES], notes: 'Staff identification required.' },
+            { id: '33', name: 'EXTRA NATURAL', category: 'CORPORATE', status: 'Active', pic: 'Ms. Chloe', phone: '03-8061 7788', branches: [...ALL_BRANCHES], notes: 'Direct Panel.' },
+            { id: '34', name: 'ROGER YUE', category: 'CORPORATE', status: 'Active', pic: 'Roger Yue Office', phone: '03-2144 1133', branches: [...ALL_BRANCHES], notes: 'Roger Yue & Co Direct Account.' },
+            { id: '35', name: 'UNIQUE SEAFOOD', category: 'CORPORATE', status: 'Active', pic: 'HR Manager', phone: '03-7955 3388', branches: [...ALL_BRANCHES], notes: 'Unique Seafood Group staff coverage.' },
+            { id: '36', name: 'PONTESA CARE', category: 'CORPORATE', status: 'Active', pic: 'Pontesa Admin', phone: '03-5191 8822', branches: [...ALL_BRANCHES], notes: 'Direct corporate panel.' },
+            { id: '37', name: 'INFOCONNECT / InfoConnect / Docuflo / BPI / Firstbase', category: 'CORPORATE', status: 'Active', pic: 'Ms. Jessica Lim', phone: '03-7880 2233', branches: [...ALL_BRANCHES], notes: 'Group umbrella account covering Infoconnect, Docuflo, BPI, & Firstbase.' },
+            { id: '38', name: 'LAKSAMANA USAHA NOODLES', category: 'CORPORATE', status: 'Active', pic: 'Mr. Lee', phone: '03-6274 5500', branches: [...ALL_BRANCHES], notes: 'Direct Factory Panel.' },
+            { id: '39', name: 'ZENITH SALES AND SERVICES SDN BHD', category: 'CORPORATE', status: 'Active', pic: 'Admin Dept', phone: '03-5631 9900', branches: [...ALL_BRANCHES], notes: 'Zenith Sales employee account.' },
+            { id: '40', name: 'NAGA DDB / Ampersand / Chariot / Cilisos / Dragonfly / Talon', category: 'CORPORATE', status: 'Active', pic: 'People Team (Naga)', phone: '03-7725 8888', branches: [...ALL_BRANCHES], notes: 'Agencies group: Naga DDB, Ampersand, Chariot, Cilisos, Dragonfly, Talon.' },
+            { id: '41', name: 'MAA ANIMAL CARE', category: 'CORPORATE', status: 'Active', pic: 'Ms. Sarah', phone: '03-4251 6677', branches: [...ALL_BRANCHES], notes: 'MAA Group Subsidiary Panel.' },
+            { id: '42', name: 'SHIN ZUSHI (KEPONG) SDN. BHD.', category: 'CORPORATE', status: 'Active', pic: 'Branch Manager', phone: '03-6243 3311', branches: [...ALL_BRANCHES], notes: 'Shin Zushi Staff Direct Panel.' },
+            { id: '43', name: 'TEMPER & SENSE SDN BHD', category: 'CORPORATE', status: 'Active', pic: 'HR Desk', phone: '03-7733 4455', branches: [...ALL_BRANCHES], notes: 'Direct corporate billing.' },
+            { id: '44', name: 'WAKOMAS CHEMICAL SDN BHD', category: 'CORPORATE', status: 'Active', pic: 'Ms. Jenny', phone: '03-3342 9911', branches: [...ALL_BRANCHES], notes: 'Wakomas Staff GL.' },
+            { id: '45', name: 'Itamac (M) Sdn. Bhd. / Shun Yi Sdn. Bhd.', category: 'CORPORATE', status: 'Active', pic: 'HR Office', phone: '03-8023 1188', branches: [...ALL_BRANCHES], notes: 'Joint corporate account for Itamac and Shun Yi.' },
+            { id: '46', name: 'Aesthetic Leader Sdn. Bhd.', category: 'CORPORATE', status: 'Active', pic: 'Ms. Nicole', phone: '03-2148 5544', branches: [...ALL_BRANCHES], notes: 'Aesthetic Leader Staff Panel.' },
+            { id: '47', name: 'Infinitium Holdings Sdn Bhd', category: 'CORPORATE', status: 'Active', pic: 'Infinitium HR', phone: '03-7650 1100', branches: [...ALL_BRANCHES], notes: 'Infinitium Group employee benefits.' },
+            { id: '48', name: 'Handal Indah Sdn Bhd', category: 'CORPORATE', status: 'Active', pic: 'En. Rashid', phone: '07-3833 8222', branches: [...ALL_BRANCHES], notes: 'Causeway Link / Handal Indah transport team panel.' },
+            { id: '49', name: 'D.F. PRINTER & SUPPLIES SDN. BHD.', category: 'CORPORATE', status: 'Active', pic: 'Mr. Tan', phone: '03-6250 8899', branches: [...ALL_BRANCHES], notes: 'DF Printer staff medical account.' },
+            { id: '50', name: 'Wawasan Bintang Sdn. Bhd.', category: 'CORPORATE', status: 'Active', pic: 'Admin Manager', phone: '03-5121 7766', branches: [...ALL_BRANCHES], notes: 'Wawasan Bintang Direct Account.' },
+            { id: '51', name: 'Jaz & Ro Music Malaysia Sdn. Bhd.', category: 'CORPORATE', status: 'Active', pic: 'Mr. Jaz', phone: '03-7728 0011', branches: [...ALL_BRANCHES], notes: 'Jaz & Ro Music employee panel.' },
+            { id: '52', name: 'Narashi Services Sdn. Bhd.', category: 'CORPORATE', status: 'Active', pic: 'Mr. Siva', phone: '03-3324 6655', branches: [...ALL_BRANCHES], notes: 'Narashi Services Direct Account.' }
+        ];
+
+        // App State
+        let panelsData = [];
+        let currentCategory = 'ALL';
+        let currentBranch = 'ALL';
+        let searchQuery = '';
+        let currentView = 'list'; // 'list' or 'grid'
+
+        // Load data from LocalStorage or initialization
+        function initData() {
+            const stored = localStorage.getItem('drprevents_panels_v2');
+            if (stored) {
+                try {
+                    panelsData = JSON.parse(stored);
+                } catch(e) {
+                    panelsData = DEFAULT_PANELS;
+                }
+            } else {
+                panelsData = DEFAULT_PANELS;
+                saveData();
+            }
+            updateStatCounts();
+            render();
+        }
+
+        function saveData() {
+            localStorage.setItem('drprevents_panels_v2', JSON.stringify(panelsData));
+        }
+
+        // Update Stat Counters
+        function updateStatCounts() {
+            const total = panelsData.length;
+            const tpa = panelsData.filter(p => p.category === 'TPA').length;
+            const corp = panelsData.filter(p => p.category === 'CORPORATE').length;
+            const govt = panelsData.filter(p => p.category === 'GOVERNMENT').length;
+
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statTpa').innerText = tpa;
+            document.getElementById('statCorporate').innerText = corp;
+            document.getElementById('statGovt').innerText = govt;
+        }
+
+        // Render Panels List
+        function render() {
+            const filtered = getFilteredPanels();
+            const listContainer = document.getElementById('panelListView');
+            const matrixBody = document.getElementById('matrixTableBody');
+            const emptyState = document.getElementById('emptyState');
+
+            // Render Search Filter indicator
+            const filterStatus = document.getElementById('filterStatus');
+            const filterStatusText = document.getElementById('filterStatusText');
+            let activeFilters = [];
+
+            if (currentCategory !== 'ALL') activeFilters.push(`Category: ${currentCategory}`);
+            if (currentBranch !== 'ALL') activeFilters.push(`Branch: ${currentBranch}`);
+            if (searchQuery.trim() !== '') activeFilters.push(`Query: "${searchQuery}"`);
+
+            if (activeFilters.length > 0) {
+                filterStatus.classList.remove('hidden');
+                filterStatusText.innerText = activeFilters.join(' | ');
+            } else {
+                filterStatus.classList.add('hidden');
+            }
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = '';
+                matrixBody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            // Render List View
+            listContainer.innerHTML = filtered.map(panel => `
+                <div class="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm hover:shadow-md hover:border-brand-300 dark:hover:border-brand-600/50 transition-all group">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        
+                        <!-- Panel Info -->
+                        <div class="space-y-2 flex-1">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+                                    ${escapeHtml(panel.name)}
+                                </h3>
+                                ${getCategoryBadge(panel.category)}
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/50">
+                                    <i class="fa-solid fa-circle text-[6px] mr-1"></i>${panel.status || 'Active'}
+                                </span>
+                            </div>
+
+                            <!-- PIC & Contact details -->
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+                                ${panel.pic ? `<span class="flex items-center space-x-1.5"><i class="fa-solid fa-user-tie text-slate-400"></i><span>PIC: <strong>${escapeHtml(panel.pic)}</strong></span></span>` : ''}
+                                ${panel.phone ? `<span class="flex items-center space-x-1.5"><i class="fa-solid fa-phone text-slate-400"></i><span>${escapeHtml(panel.phone)}</span></span>` : ''}
+                            </div>
+
+                            ${panel.notes ? `<p class="text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80 italic"><i class="fa-solid fa-circle-info text-brand-500 mr-1.5"></i>${escapeHtml(panel.notes)}</p>` : ''}
+                        </div>
+
+                        <!-- Full Branch List (Un-truncated explicit badges) -->
+                        <div class="flex flex-col md:items-end space-y-2 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-slate-800">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Available at All ${panel.branches.length} Branches:</span>
+                            <div class="flex flex-wrap gap-1.5 max-w-md md:justify-end">
+                                ${panel.branches.map(b => `
+                                    <span class="px-2 py-1 rounded-lg text-xs font-bold ${currentBranch === b ? 'bg-brand-600 text-white ring-2 ring-brand-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'} transition-all">
+                                        ${b}
+                                    </span>
+                                `).join('')}
+                            </div>
+                            <button onclick="openDetailModal('${panel.id}')" class="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 flex items-center space-x-1 mt-1">
+                                <span>View Full Panel Details</span>
+                                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Matrix View
+            matrixBody.innerHTML = filtered.map(panel => `
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 font-bold text-slate-900 dark:text-white sticky left-0 bg-white dark:bg-darkCard shadow-sm">
+                        ${escapeHtml(panel.name)}
+                    </td>
+                    <td class="p-4 whitespace-nowrap">
+                        ${getCategoryBadge(panel.category)}
+                    </td>
+                    ${ALL_BRANCHES.map(b => {
+                        const isAvailable = panel.branches.includes(b);
+                        return `
+                            <td class="p-2 text-center">
+                                ${isAvailable ? `
+                                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-md bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
+                                        <i class="fa-solid fa-check"></i>
+                                    </span>
+                                ` : `
+                                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-600 text-xs">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </span>
+                                `}
+                            </td>
+                        `;
+                    }).join('')}
+                </tr>
+            `).join('');
+        }
+
+        function getFilteredPanels() {
+            return panelsData.filter(panel => {
+                // Category Filter
+                if (currentCategory !== 'ALL' && panel.category !== currentCategory) return false;
+
+                // Branch Filter
+                if (currentBranch !== 'ALL' && !panel.branches.includes(currentBranch)) return false;
+
+                // Search Query
+                if (searchQuery.trim() !== '') {
+                    const query = searchQuery.toLowerCase();
+                    const nameMatch = panel.name.toLowerCase().includes(query);
+                    const picMatch = panel.pic && panel.pic.toLowerCase().includes(query);
+                    const phoneMatch = panel.phone && panel.phone.includes(query);
+                    const notesMatch = panel.notes && panel.notes.toLowerCase().includes(query);
+                    const branchMatch = panel.branches.some(b => b.toLowerCase().includes(query));
+                    if (!nameMatch && !picMatch && !phoneMatch && !notesMatch && !branchMatch) return false;
+                }
+
+                return true;
+            });
+        }
+
+        function getCategoryBadge(category) {
+            switch(category) {
+                case 'TPA':
+                    return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-50 text-cyan-700 dark:bg-cyan-950/80 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800/60"><i class="fa-solid fa-shield-halved mr-1 text-[10px]"></i>TPA / Insurance</span>`;
+                case 'CORPORATE':
+                    return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60"><i class="fa-solid fa-briefcase mr-1 text-[10px]"></i>Corporate Direct</span>`;
+                case 'GOVERNMENT':
+                    return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-50 text-sky-700 dark:bg-sky-950/80 dark:text-sky-300 border border-sky-200 dark:border-sky-800/60"><i class="fa-solid fa-landmark mr-1 text-[10px]"></i>Govt / Scheme</span>`;
+                default:
+                    return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">${category}</span>`;
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/[&<>"']/g, function(m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[m];
+            });
+        }
+
+        // Modal Handlers
+        function openDetailModal(id) {
+            const panel = panelsData.find(p => p.id === id);
+            if (!panel) return;
+
+            const modalContent = document.getElementById('detailModalContent');
+            modalContent.innerHTML = `
+                <div class="px-6 py-5 border-b border-slate-200 dark:border-darkBorder flex items-center justify-between bg-slate-50 dark:bg-slate-900/50">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            ${getCategoryBadge(panel.category)}
+                            <span class="text-xs text-slate-400">ID: #${panel.id}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">${escapeHtml(panel.name)}</h3>
+                    </div>
+                    <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <div class="p-6 space-y-5">
+                    <!-- Status & Contact Info -->
+                    <div class="grid grid-cols-2 gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800">
+                        <div>
+                            <span class="block text-[11px] uppercase font-bold text-slate-400">Person In Charge (PIC)</span>
+                            <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(panel.pic) || 'Not Specified'}</span>
+                        </div>
+                        <div>
+                            <span class="block text-[11px] uppercase font-bold text-slate-400">Contact Number</span>
+                            <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(panel.phone) || 'Not Provided'}</span>
+                        </div>
+                    </div>
+
+                    <!-- Branches Coverage -->
+                    <div>
+                        <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">Available Clinics (${panel.branches.length} Branches)</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${panel.branches.map(b => `<span class="px-3 py-1 bg-brand-50 dark:bg-brand-950/80 text-brand-700 dark:text-brand-300 font-bold text-xs rounded-lg border border-brand-200 dark:border-brand-800">${b}</span>`).join('')}
+                        </div>
+                    </div>
+
+                    ${panel.notes ? `
+                        <div>
+                            <h4 class="text-xs font-bold uppercase text-slate-400 mb-1">Important Instructions / Billing Notes</h4>
+                            <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed bg-amber-50 dark:bg-amber-950/30 p-3 rounded-xl border border-amber-200 dark:border-amber-800/50">
+                                ${escapeHtml(panel.notes)}
+                            </p>
+                        </div>
+                    ` : ''}
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <button onclick="deletePanel('${panel.id}')" class="text-xs text-red-600 dark:text-red-400 hover:underline flex items-center space-x-1">
+                            <i class="fa-solid fa-trash"></i>
+                            <span>Remove Panel</span>
+                        </button>
+                        ${panel.phone ? `
+                            <a href="tel:${panel.phone}" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs flex items-center space-x-2">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>Call Contact</span>
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function deletePanel(id) {
+            if (confirm('Are you sure you want to remove this panel?')) {
+                panelsData = panelsData.filter(p => p.id !== id);
+                saveData();
+                updateStatCounts();
+                closeDetailModal();
+                render();
+            }
+        }
+
+        function resetFilters() {
+            currentCategory = 'ALL';
+            currentBranch = 'ALL';
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            document.getElementById('branchSelectFilter').value = 'ALL';
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.dataset.category === 'ALL') {
+                    btn.className = 'tab-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors bg-brand-600 text-white shadow-sm';
+                } else {
+                    btn.className = 'tab-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700';
+                }
+            });
+
+            render();
+        }
+
+        // Setup DOM Event Listeners
+        window.addEventListener('DOMContentLoaded', () => {
+            initData();
+
+            // Dark Mode Toggle Logic
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            themeToggleBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                const isDark = document.documentElement.classList.contains('dark');
+                localStorage.setItem('drprevents_theme', isDark ? 'dark' : 'light');
+            });
+
+            // Restore dark theme preference
+            if (localStorage.getItem('drprevents_theme') === 'dark' || (!('drprevents_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
+            // Search Input listener
+            const searchInput = document.getElementById('searchInput');
+            const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                if (searchQuery.length > 0) {
+                    clearSearchBtn.classList.remove('hidden');
+                } else {
+                    clearSearchBtn.classList.add('hidden');
+                }
+                render();
+            });
+
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchQuery = '';
+                clearSearchBtn.classList.add('hidden');
+                render();
+            });
+
+            document.getElementById('resetFiltersBtn').addEventListener('click', resetFilters);
+
+            // Branch Dropdown Listener
+            document.getElementById('branchSelectFilter').addEventListener('change', (e) => {
+                currentBranch = e.target.value;
+                render();
+            });
+
+            // Category Tab Listeners
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => {
+                        b.className = 'tab-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700';
+                    });
+                    btn.className = 'tab-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors bg-brand-600 text-white shadow-sm';
+                    currentCategory = btn.dataset.category;
+                    render();
+                });
+            });
+
+            // View Mode Switcher
+            const viewListBtn = document.getElementById('viewListBtn');
+            const viewGridBtn = document.getElementById('viewGridBtn');
+            const listView = document.getElementById('panelListView');
+            const matrixView = document.getElementById('panelMatrixView');
+
+            viewListBtn.addEventListener('click', () => {
+                currentView = 'list';
+                viewListBtn.className = 'px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors bg-white dark:bg-darkCard text-brand-600 dark:text-brand-400 shadow-sm';
+                viewGridBtn.className = 'px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white';
+                listView.classList.remove('hidden');
+                matrixView.classList.add('hidden');
+            });
+
+            viewGridBtn.addEventListener('click', () => {
+                currentView = 'grid';
+                viewGridBtn.className = 'px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors bg-white dark:bg-darkCard text-brand-600 dark:text-brand-400 shadow-sm';
+                viewListBtn.className = 'px-3 py-2 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white';
+                matrixView.classList.remove('hidden');
+                listView.classList.add('hidden');
+            });
+
+            // Modal Trigger Listeners
+            const addPanelModal = document.getElementById('addPanelModal');
+            document.getElementById('addPanelBtn').addEventListener('click', () => {
+                addPanelModal.classList.remove('hidden');
+            });
+
+            document.querySelectorAll('.modal-close').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    addPanelModal.classList.add('hidden');
+                    closeDetailModal();
+                });
+            });
+
+            // Add Panel Form Submit
+            document.getElementById('addPanelForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const selectedBranches = Array.from(document.querySelectorAll('input[name="branchCheckbox"]:checked')).map(cb => cb.value);
+
+                if (selectedBranches.length === 0) {
+                    alert('Please select at least one branch for this panel.');
+                    return;
+                }
+
+                const newPanel = {
+                    id: Date.now().toString(),
+                    name: document.getElementById('panelNameInput').value.trim(),
+                    category: document.getElementById('panelCategoryInput').value,
+                    status: document.getElementById('panelStatusInput').value,
+                    pic: document.getElementById('panelPicInput').value.trim(),
+                    phone: document.getElementById('panelPhoneInput').value.trim(),
+                    branches: selectedBranches,
+                    notes: document.getElementById('panelNotesInput').value.trim()
+                };
+
+                panelsData.unshift(newPanel);
+                saveData();
+                updateStatCounts();
+                render();
+
+                // Reset and close
+                document.getElementById('addPanelForm').reset();
+                addPanelModal.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
